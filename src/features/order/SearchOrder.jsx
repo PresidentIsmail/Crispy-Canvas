@@ -23,11 +23,11 @@ const SearchOrder = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="orderId">Enter Order ID</label>
         <input
           type="text"
           id="orderId"
           value={orderId}
+          placeholder="Search order #"
           onChange={(e) => setOrderId(e.target.value)}
         />
       </div>
