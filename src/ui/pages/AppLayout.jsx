@@ -15,7 +15,6 @@ export default function AppLayout() {
   return (
     <div className="layout">
       <Header />
-      <CartOverview />
 
       {isLoading || isSubmitting ? (
         <Loading />
@@ -23,6 +22,8 @@ export default function AppLayout() {
         // otherwise render the child components
         <Outlet />
       )}
+
+      <CartOverview />
     </div>
   );
 }

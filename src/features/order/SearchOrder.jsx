@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SearchOrder = () => {
@@ -22,37 +21,15 @@ const SearchOrder = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "flex", alignItems: "baseline" }}
-    >
-      <div
-        style={{
-          backgroundColor: "#f7f7f7",
-          display: "flex",
-          alignItems: "center",
-          color: "#000",
-        }}
-      >
+    <form onSubmit={handleSubmit}>
+      <div>
         <label htmlFor="orderId">Enter Order ID</label>
         <input
           type="text"
           id="orderId"
           value={orderId}
           onChange={(e) => setOrderId(e.target.value)}
-          style={{ width: "auto" }}
         />
-        <button
-          type="submit"
-          onClick={handleSubmit}
-          style={{
-            cursor: "pointer",
-            border: "none",
-            backgroundColor: "transparent",
-          }}
-        >
-          <SearchIcon />
-        </button>
       </div>
     </form>
   );

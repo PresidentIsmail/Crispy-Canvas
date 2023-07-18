@@ -1,13 +1,5 @@
 import { useState } from "react";
 
-import {
-  TextField,
-  Checkbox,
-  Box,
-  FormControlLabel,
-  Button,
-  Typography,
-} from "@mui/material";
 import { Form, redirect } from "react-router-dom";
 
 // get the helper function to create the order
