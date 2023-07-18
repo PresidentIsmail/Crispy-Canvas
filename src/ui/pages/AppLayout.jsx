@@ -10,18 +10,18 @@ export default function AppLayout() {
   const isLoading = navigation.state === "loading";
   const isSubmitting = navigation.state === "submitting";
 
-  console.log("navigation", navigation);
 
   return (
-    <div className="layout">
+    <div className="grid h-screen grid-rows-[auto_1fr_auto]">
       <Header />
 
-      {isLoading || isSubmitting ? (
-        <Loading />
-      ) : (
-        // otherwise render the child components
-        <Outlet />
-      )}
+      {isLoading || (isSubmitting && <Loading />)}
+
+      <div className="overflow-scroll">
+        <main className="mx-auto max-w-3xl">
+          <Outlet />
+        </main>
+      </div>
 
       <CartOverview />
     </div>
