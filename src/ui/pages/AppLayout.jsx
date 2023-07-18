@@ -2,7 +2,7 @@
 import { Outlet, useNavigation } from "react-router-dom";
 
 import Header from "../Header";
-import Loading from "../Loading";
+import Loader from "../Loader";
 import CartOverview from "../../features/cart/CartOverview";
 
 export default function AppLayout() {
@@ -10,12 +10,11 @@ export default function AppLayout() {
   const isLoading = navigation.state === "loading";
   const isSubmitting = navigation.state === "submitting";
 
-
   return (
     <div className="grid h-screen grid-rows-[auto_1fr_auto]">
       <Header />
 
-      {isLoading || (isSubmitting && <Loading />)}
+      {isLoading || (isSubmitting && <Loader />)}
 
       <div className="overflow-scroll">
         <main className="mx-auto max-w-3xl">
