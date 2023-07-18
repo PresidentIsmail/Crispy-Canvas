@@ -6,12 +6,11 @@ const Menu = () => {
   const menu = useLoaderData();
 
   return (
-    <div className="layout">
-      <h1>Menu</h1>
+    <ul className="divide-y divide-stone-200 px-2">
       {menu.map((pizza) => (
-        <MenuItem key={pizza.id} pizza={pizza} />
+        <MenuItem pizza={pizza} key={pizza.id} />
       ))}
-    </div>
+    </ul>
   );
 };
 

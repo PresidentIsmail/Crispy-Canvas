@@ -1,38 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SearchOrder = () => {
-  const [orderId, setOrderId] = useState("");
+function SearchOrder() {
+  const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
-
-    // there must be an orderId
-    if (!orderId) {
-      return;
-    }
-
-    // navigate to /order/:orderId
-    navigate(`/order/${orderId}`);
-
-    // reset orderId
-    setOrderId("");
-  };
+    if (!query) return;
+    navigate(`/order/${query}`);
+    setQuery("");
+  }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <input
-          type="text"
-          id="orderId"
-          value={orderId}
-          placeholder="Search order #"
-          onChange={(e) => setOrderId(e.target.value)}
-        />
-      </div>
+      <input
+        placeholder="Search order #"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="w-28 rounded-full bg-yellow-100 px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-yellow-500 focus:ring-opacity-50 sm:w-64 sm:focus:w-72"
+      />
     </form>
   );
-};
+}
 
 export default SearchOrder;
