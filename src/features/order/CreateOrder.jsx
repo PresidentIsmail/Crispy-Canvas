@@ -1,50 +1,38 @@
 import { useState } from "react";
+
+import store from "../../store";
+import { useSelector } from "react-redux";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
+
+import { emptyCart } from "../../features/cart/cartSlice";
+// special useSelector function that will get the data from the action function
+import { selectTotalPrice } from "../../features/cart/cartSlice";
 
 import Button from "../../ui/Button";
 
 // get the helper function to create the order
 import { createOrder } from "../../services/apiRestaurant";
-
-// https://uibakery.io/regex-library/phone-number
-const isValidPhone = (str) =>
-  /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str,
-  );
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import { formatCurrency } from "../../utils/helpers";
 
 function CreateOrder() {
+  // keep track of priority checkbox
+  const [priority, setPriority] = useState(false);
+  // get the username from the redux store
+  const { username } = useSelector((state) => state.user);
+  // get the cart from the redux store
+  const { cart } = useSelector((state) => state.cart);
+  // get the total price from the redux store
+  const totalPrice = useSelector(selectTotalPrice);
+  // total price if the order is priority. 20% more than the regular price
+  const priorityTotalPrice = totalPrice * 1.2;
+  const finalPrice = priority ? priorityTotalPrice : totalPrice;
+
   // used for validating the form
-  const [customer, setCustomer] = useState("");
+  const [customer, setCustomer] = useState(username);
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [isValid, setIsValid] = useState(false); // Initially assume the phone number is valid
   const [hasBlurred, setHasBlurred] = useState(false); // Track if the user has blurred the phone number input
-
-  const cart = fakeCart;
 
   const handlePhoneChange = (e) => {
     setPhone(e.target.value);
@@ -120,6 +108,8 @@ function CreateOrder() {
             type="checkbox"
             id="priority"
             name="priority"
+            value={priority}
+            onChange={(e) => setPriority(e.target.checked)}
           />
           <label className="font-medium" htmlFor="priority">
             Want to give your order priority?
@@ -127,14 +117,14 @@ function CreateOrder() {
         </div>
 
         {/* Hidden input to send the cart data */}
-        <input type="hidden" name="cart" value={JSON.stringify(fakeCart)} />
+        <input type="hidden" name="cart" value={JSON.stringify(cart)} />
 
         <div>
           <Button
             type="primary"
             disabled={!isValid || !customer || !phone || !address}
           >
-            Order now
+            Order now from {formatCurrency(finalPrice)}
           </Button>
         </div>
       </Form>
@@ -154,8 +144,11 @@ export async function action({ request }) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "on",
+    priority: data.priority === "true",
   };
+
+  // clear the cart after the order is created
+  store.dispatch(emptyCart());
 
   // create the order and redirect to the order.id page
   const { id } = await createOrder(order);

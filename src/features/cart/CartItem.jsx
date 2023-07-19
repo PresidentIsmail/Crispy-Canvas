@@ -1,10 +1,21 @@
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 
 import Button from "../../ui/Button";
+
+// dispatch action creator from cartSlice
+import { removeFromCart } from "./cartSlice";
+
 import { formatCurrency } from "../../utils/helpers";
 
 function CartItem({ item }) {
   const { pizzaId, name, quantity, totalPrice } = item;
+  const dispatch = useDispatch();
+
+  // function to remove a pizza from the cart
+  const handleRemoveFromCart = () => {
+    dispatch(removeFromCart(pizzaId));
+  };
 
   return (
     <li className="py-3 sm:flex sm:items-center sm:justify-between">
@@ -13,7 +24,9 @@ function CartItem({ item }) {
       </p>
       <div className="flex items-center justify-between sm:gap-6">
         <p className="text-sm font-bold">{formatCurrency(totalPrice)}</p>
-        <Button type="small">Delete</Button>
+        <Button type="small" onClick={handleRemoveFromCart}>
+          Delete
+        </Button>
       </div>
     </li>
   );

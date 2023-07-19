@@ -31,7 +31,7 @@ OrderItem.propTypes = {
       name: PropTypes.string,
       price: PropTypes.number,
     }),
-  ).isRequired,
+  ),
 };
 
 export default OrderItem;

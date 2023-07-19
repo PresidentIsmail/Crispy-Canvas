@@ -1,43 +1,44 @@
+import { useSelector, useDispatch } from "react-redux";
+
 import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import CartItem from "./CartItem";
+import EmptyCart from "./EmptyCart";
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+// action creator from cartSlice
+import { emptyCart } from "./cartSlice";
+
+// special useSelector functions from cartSlice
+import { selectCart } from "./cartSlice";
 
 function Cart() {
-  const cart = fakeCart;
+  const { username } = useSelector((state) => state.user);
+  // get the cart from the store
+  const cart = useSelector(selectCart);
+  const dispatch = useDispatch();
+
+  // function to clear the cart
+  const handleClearCart = () => {
+    dispatch(emptyCart());
+  };
+
+  // if the cart is empty, show the EmptyCart component
+  if (cart.length === 0) {
+    return <EmptyCart />;
+  }
 
   return (
     <div className="px-4 py-3">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>
 
-      <h2 className="mt-7 text-xl font-semibold">Your cart, %NAME%</h2>
+      <h2 className="mt-7 text-xl font-semibold">
+        Your cart,{" "}
+        <span className="font-bold text-yellow-700"> {username}</span>
+      </h2>
 
       <ul className="mt-3 divide-y divide-stone-200 border-b">
         {cart.map((item) => (
-          <CartItem item={item} key={item.key} />
+          <CartItem item={item} key={item.pizzaId} />
         ))}
       </ul>
 
@@ -46,7 +47,9 @@ function Cart() {
           Order pizzas
         </Button>
 
-        <Button type="secondary">Clear cart</Button>
+        <Button type="secondary" onClick={handleClearCart}>
+          Clear cart
+        </Button>
       </div>
     </div>
   );
